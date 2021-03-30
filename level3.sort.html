@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="sort.css" type="text/css">
+
+</head>
+
+<body>
+    <div id="header">
+        <input type="text" id="Array">
+        <button id="leftIn">左侧进</button>
+        <button id="rightIn">右侧进</button>
+        <button id="leftOut">左侧出</button>
+        <button id="rightOut">右侧出</button>
+        <button id="sortAgain">重新排序</button>
+        <button id="clear">清空</button>
+        <button id="random" onclick="random()">随机生成</button>
+    </div>
+    <ul id="sort_li"></ul>
+    <script type="text/javascript">
+        var num = document.getElementById("Array");
+        var leftIn = document.getElementById("leftIn");
+        var rightIn = document.getElementById("rightIn");
+        var leftOut = document.getElementById("leftOut");
+        var rightOut = document.getElementById("rightOut");
+        var sortAgain = document.getElementById("sortAgain");
+        var clear = document.getElementById("clear");
+        var alul = document.getElementById("sort_li");
+        var alli = document.getElementsByTagName("li");
+        var display = document.getElementById("display");
+        let numArr = Array();
+        // let inArr=Array();
+        numArr.length = 0;
+        let ranflag = false;
+        let sortAgainflag = false;
+        let inputflag = false;
+        // 左侧进
+        leftIn.onclick = function () {
+            if (num.value < 10||num.value>100) {
+                alert("请输入10-100以内的数字");
+            } else if (num.value >= 10 && ranflag == true) {
+                numArr.unshift(num.value);
+                numArr.pop();
+                init(numArr, alul);
+            } else {
+                var newli = document.createElement("li");
+                newli.innerHTML = '<li class="" style="height: ' + num.value * 5 + 'px;width:' + 10 + 'px">' + num.value + '</li>';
+                numArr.unshift(num.value);
+                init(numArr, alul);
+                inputflag = true;
+
+            }
+        }
+        // 右侧进
+        rightIn.onclick = function () {
+            if (num.value < 10) {
+                alert("请输入10-100以内的数字");
+            } else if (num.value >= 10 && ranflag == true) {
+                numArr.push(num.value);
+                numArr.shift();
+                init(numArr, alul);
+            } else if (ranflag == false) {
+                var newli = document.createElement("li");
+                newli.innerHTML = '<li class="" style="height: ' + num.value * 5 + 'px;width:' + 10 + 'px">' + num.value + '</li>';
+                numArr.push(num.value);
+                init(numArr, alul);
+                inputflag = true;
+
+            }
+        }
+        // 左侧出
+        leftOut.onclick = function () {
+            if (ranflag == true) {//随机输入时的左侧边出
+                numArr.shift();
+                init(numArr, alul);
+            } else {//自己输入时候的左侧边出
+                numArr.shift();
+                init(numArr, alul);
+            }
+        }
+        // 右侧出
+        rightOut.onclick = function () {
+            if (ranflag == true) {//随机输入时的右侧边出
+                numArr.pop();
+                init(numArr, alul);
+            } else {//自己输入时候的右侧边出
+                numArr.pop();
+                init(numArr, alul);
+            }
+        }
+        // 随机生成按钮
+        window.onload = function () {
+            this.Arr = [];
+            random.onclick = function () {
+                numArr = [];
+                ranflag = true;
+                for (var i = 0; i < 10; i++) {
+                    numArr.push(randomGet(10, 30));
+                }
+                init(numArr, alul);
+            }
+        }
+        // 产生一组随机数
+        function randomGet(a, b) {
+            var result = Math.random() * (b + a);
+            if (result >= 10) {
+                return result >> 0;
+            } else if (result >= 100) {
+                return result % 10 >> 0;
+            } else if (result < 10) {
+                return result + b + 30 >> 0;
+            }
+        }
+        // 为初始每一个数组元素增添样式
+        function init(Arr, alul) {
+            let numArr = Arr.slice();
+            let li = "";
+            for (let i = 0; i < numArr.length; i++) {
+                let item = numArr[i];
+                li += '<li class="" style="height: ' + item * 5 + 'px">' + item + '</li>';
+            }
+            alul.innerHTML = li;
+        }
+        // 冒泡排序算法
+        function sort(numArr) {
+            let sortArr = numArr.slice(), temp;
+            for (let i = 0; i < sortArr.length - 1; i++) {
+                for (let j = 0; j < sortArr.length - 1 - i; j++) {
+                    if (sortArr[j + 1] < sortArr[j]) {
+                        temp = sortArr[j];
+                        sortArr[j] = sortArr[j + 1];
+                        sortArr[j + 1] = temp;
+                    }
+                    this.pushArr(sortArr.slice(), j, sortArr.length - 1 - i, false);// 缓存排序中的数组状态
+                }
+            }
+        }
+        function Show(numArr) {
+            let sortArr = numArr.slice();
+            clearInterval(this.timer);
+            // 设定时间播放交换的过程
+            setInterval(function () {
+                if (Arr.length > 0) {
+                    this.SortDisplay(Arr[0][0]);// 某种情况下的数组排列方式，调用SortDisplay显示
+                    this.Arr.shift();// Arr存放着数组的所有变换状态，此处为前一个被消除
+                }
+            }, 100);
+        }
+        // 为每一次改变后的数组增添样式且显示
+        function SortDisplay(arr) {
+            let li = '', className = "";
+            for (let i = 0; i < arr.length; i++) {
+                li += '<li class="' + className + '" style="height: ' + arr[i] * 5 + 'px">' + arr[i] + '</li>';
+            }
+            alul.innerHTML = li;
+        }
+        function pushArr() {
+            this.Arr.push(Array.prototype.slice.call(arguments));
+        }
+        // 重新排列
+        sortAgain.onclick = function () {
+            this.inArr = [];
+            if (ranflag == true) {
+                sortAgainflag = true;
+                sort(numArr);
+                Show(numArr);
+            } else {
+                sort(numArr);
+                Show(numArr);
+            }
+        }
+        // 一键清除
+        clear.onclick = function () {
+            if (ranflag == true) {
+                alul.innerHTML = "";
+                numArr = Array();
+                inArr = Array();
+                ranflag = false;
+            } else {
+                alul.innerHTML = "";
+                inArr = Array();
+                inputflag = false;
+            }
+        }
+    </script>
+</body>
+
+</html>

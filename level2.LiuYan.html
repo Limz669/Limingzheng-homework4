@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liuyan</title>
+    <link rel="stylesheet" href="Liuyan.css" type="text/css">
+</head>
+
+<body>
+    <div class="body">
+        <p>请在留言框输入您的留言内容</p>
+        <textarea name="" id="Text" rows="7"></textarea>
+        <button type="button" id="submit" onclick="fun()">发送内容</button>
+        <h2>留言内容</h2>
+        <ul id="display"></ul>
+    </div>
+    <script>
+        var text = document.getElementById("Text");
+        var ul = document.getElementById("display");
+        var n = 0;
+        function fun() {
+            var Alla = document.getElementsByTagName("a");
+            if (text.value == "") {
+                alert("请输入留言内容！");
+            }
+            else {
+                var li = document.createElement("li");
+                n++;
+                var txt="第" + n + "条留言" + "："+text.value;
+                console.log(n);
+                li.innerHTML = txt+"<a href='javascript:void(0)'>删除</a>"+  "<span class='time'>" + new Date().toLocaleTimeString() + "</span>";
+                ul.appendChild(li);
+            }
+            text.value = "";
+            for (var i = 0; i < Alla.length; i++) {
+                Alla[i].onclick = function () {
+                    var flag=confirm("确认删除吗？");
+                    if(flag){
+                        ul.removeChild(this.parentNode);
+                    }
+                }
+            }
+        }
+        
+    </script>
+</body>
+
+</html>
